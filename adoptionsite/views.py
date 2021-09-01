@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 import pandas
+import pymongo
 
 from adoptionsite.models import CartItem, Animal
 
@@ -10,10 +11,14 @@ login_ids = [ 'pencil', 'flower', 'icecream', 'basketball', 'orange', 'placehold
 
 # Initial load of animals
 available_animals = []
-animals_df = pandas.read_csv('animals.csv', index_col='Id')
 
-for animal in animals_df.itertuples():
-    available_animals.append(Animal(id=animal.Index, name=animal.Name, description=animal.Description, age=animal.Age))
+uri = "mongodb:secert_key"
+mongo_client = pymongo.MongoClient(uri)
+mongo_db = mongo_client.TAA_Portal
+mongodb_animals = mongo_db.AvailableAnimals
+
+for animal in mongodb_animals.find():
+    available_animals.append(Animal(id=animal['_id'], name=animal['Name'], description=animal['Description'], age=animal['Age']))
 
 cart_items = [
     CartItem(id=0, quantity=0, name=available_animals[0].name),
