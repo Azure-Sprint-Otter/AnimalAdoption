@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import pandas
 import pymongo
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
+import os
 
 from adoptionsite.models import CartItem, Animal
 
@@ -12,8 +15,14 @@ login_ids = [ 'pencil', 'flower', 'icecream', 'basketball', 'orange', 'placehold
 # Initial load of animals
 available_animals = []
 
-uri = "mongodb:secert_key"
-mongo_client = pymongo.MongoClient(uri)
+keyVaultName = os.environ["Django__KeyVaultName"]
+KVUri = f"https://{keyVaultName}.vault.azure.net"
+
+credential = DefaultAzureCredential()
+client = SecretClient(vault_url=KVUri, credential=credential)
+URI = client.get_secret('MONGODB-CONNECTION-STRING').value
+
+mongo_client = pymongo.MongoClient(URI)
 mongo_db = mongo_client.TAA_Portal
 mongodb_animals = mongo_db.AvailableAnimals
 

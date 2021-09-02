@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
+
+keyVaultName = os.environ["Django__KeyVaultName"]
+KVUri = f"https://{keyVaultName}.vault.azure.net"
+
+credential = DefaultAzureCredential()
+client = SecretClient(vault_url=KVUri, credential=credential)
+DJANGO_SECRET_KEY = client.get_secret('DJANGO-SECRET-KEY').value
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o^e+o_@ol4+nb_n79rz1_@^wbv4n4=801u@@c*-g*lhofl))%e'
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['Django__Debug']
@@ -86,8 +95,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'taa_portal',
-        'USER': 'username@host',
-        'PASSWORD': 'password',
+        'USER': 'placeholder',
+        'PASSWORD': 'placeholder',
         'HOST': 'psql-aap-dev-sea-001.postgres.database.azure.com',
         'PORT': '5432',
     },
