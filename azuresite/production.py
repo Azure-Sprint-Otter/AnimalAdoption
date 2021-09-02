@@ -1,4 +1,5 @@
 import os
+
 from .settings import *
 
 if 'WEBSITE_HOSTNAME' in os.environ:
@@ -17,7 +18,7 @@ DATABASES = {
     },
 }
 
-MIDDLEWARE = [                                                                   
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+DEBUG = os.environ['Django__Debug']
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = ('whitenoise.storage.CompressedManifestStaticFilesStorage')
