@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'o^e+o_@ol4+nb_n79rz1_@^wbv4n4=801u@@c*-g*lhofl))%e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['Django__Debug']
 
 ALLOWED_HOSTS = []
 
