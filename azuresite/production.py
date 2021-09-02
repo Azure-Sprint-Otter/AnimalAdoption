@@ -2,10 +2,7 @@ import os
 
 from .settings import *
 
-if 'WEBSITE_HOSTNAME' in os.environ:
-    ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']]
-else:
-    ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
 DATABASES = {
     'default': {
